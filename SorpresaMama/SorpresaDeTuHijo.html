@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sorpresa de tu hijo 💚</title>
+<style>
+  body {
+    margin: 0;
+    overflow-x: hidden;
+    background: black;
+    color: #00ff99;
+    font-family: 'Courier New', monospace;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 0;
+  }
+
+  .content {
+    position: relative;
+    text-align: center;
+    z-index: 1;
+  }
+
+  #password-screen, #start-screen {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+  input[type="password"] {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  button {
+    background: #00ff99;
+    color: black;
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 0 15px #00ff99;
+  }
+
+  button:hover {
+    background: #00cc77;
+    transform: scale(1.1);
+    box-shadow: 0 0 25px #00ff99;
+  }
+
+  .error {
+    color: red;
+    margin-top: 10px;
+    font-weight: bold;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  .fade {
+    animation: fadeIn 3s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+  .gallery-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding: 60px 0;
+  }
+
+  .top-row, .bottom-row {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .middle-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    flex-wrap: wrap;
+  }
+
+  .top-row img, .bottom-row img {
+    width: 250px;
+    border-radius: 15px;
+    box-shadow: 0 0 20px #00ff99;
+    animation: zoomIn 5s ease-in-out infinite alternate;
+  }
+
+  .middle-row video {
+    width: 300px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px #00ff99;
+    transition: transform 0.4s ease-in-out;
+  }
+
+  .middle-row video:hover {
+    transform: scale(1.05);
+  }
+
+  .message-box {
+    max-width: 420px;
+    padding: 25px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    box-shadow: 0 0 25px #00ff99;
+    animation: fadeIn 2.5s ease-in-out;
+  }
+
+  .message {
+    font-size: 1.4em;
+    color: #00ffcc;
+    text-align: center;
+    line-height: 1.5;
+    animation: glow 2.5s ease-in-out infinite alternate, float 6s ease-in-out infinite;
+  }
+
+  @keyframes glow {
+    from { text-shadow: 0 0 10px #00ffcc, 0 0 20px #00cc99; opacity: 0.9; }
+    to { text-shadow: 0 0 25px #00ffcc, 0 0 45px #00ff99; opacity: 1; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+  }
+
+  @keyframes zoomIn {
+    from {transform: scale(1);}
+    to {transform: scale(1.1);}
+  }
+
+  @media (max-width: 768px) {
+    .middle-row video { width: 200px; }
+    .message { font-size: 1.1em; }
+    .message-box { max-width: 320px; }
+  }
+</style>
+</head>
+<body>
+<canvas id="matrix"></canvas>
+
+<!-- Pantalla de contraseña -->
+<div class="content" id="password-screen">
+  <h2>🔐 Ingresa la contraseña para ver tu sorpresa 💚</h2>
+  <input type="password" id="passwordInput" placeholder="Contraseña..." />
+  <br>
+  <button id="unlockButton">Acceder</button>
+  <p class="error hidden" id="errorMsg">Contraseña incorrecta 😢</p>
+</div>
+
+<!-- Pantalla de inicio -->
+<div class="content hidden" id="start-screen">
+  <h1>💚 Hola señora Stella 💚</h1>
+  <p>Hay algo especial esperándote...</p>
+  <button id="startButton">Ver tu sorpresa 💌</button>
+</div>
+
+<!-- Contenido sorpresa -->
+<div class="content hidden" id="gallery">
+  <div class="gallery-layout fade">
+
+    <div class="top-row">
+      <img src="foto1.jpg" alt="Foto 1">
+      <img src="foto2.jpg" alt="Foto 2">
+    </div>
+
+    <div class="middle-row">
+      <video src="video1.mp4" autoplay loop muted></video>
+
+      <div class="message-box fade">
+        <p id="typewriter" class="message"></p>
+      </div>
+
+      <video src="video2.mp4" autoplay loop muted></video>
+    </div>
+
+    <div class="bottom-row">
+      <img src="foto3.jpg" alt="Foto 3">
+      <img src="foto4.jpg" alt="Foto 4">
+    </div>
+  </div>
+
+  <button onclick="location.reload()">🔁 Repetir 💞</button>
+</div>
+
+<audio id="voice" src="mama.mp3"></audio>
+<audio id="music" src="Mil gracias te doy.mp3"></audio>
+<audio id="typeSound" src="type.mp3"></audio>
+
+<script>
+  // Fondo tipo Matrix
+  const canvas = document.getElementById('matrix');
+  const ctx = canvas.getContext('2d');
+  canvas.height = window.innerHeight;
+  canvas.width = window.innerWidth;
+  const letters = Array(300).join('1').split('');
+  const draw = () => {
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#00ff99';
+    ctx.font = '15pt Courier New';
+    letters.map((y, index) => {
+      const text = String.fromCharCode(1000 + Math.random() * 1000);
+      const x = index * 10;
+      ctx.fillText(text, x, y);
+      letters[index] = y > 758 + Math.random() * 1e4 ? 0 : y + 10;
+    });
+  };
+  setInterval(draw, 50);
+
+  // Elementos
+  const passwordScreen = document.getElementById('password-screen');
+  const unlockButton = document.getElementById('unlockButton');
+  const passwordInput = document.getElementById('passwordInput');
+  const errorMsg = document.getElementById('errorMsg');
+  const startScreen = document.getElementById('start-screen');
+  const startButton = document.getElementById('startButton');
+  const gallery = document.getElementById('gallery');
+  const voice = document.getElementById('voice');
+  const music = document.getElementById('music');
+  const typeSound = document.getElementById('typeSound');
+  const typewriter = document.getElementById('typewriter');
+
+  const CORRECT_PASSWORD = "pocaluz2803";
+
+  unlockButton.addEventListener("click", () => {
+    if (passwordInput.value.trim() === CORRECT_PASSWORD) {
+      passwordScreen.classList.add("hidden");
+      startScreen.classList.remove("hidden");
+      errorMsg.classList.add("hidden");
+    } else {
+      errorMsg.classList.remove("hidden");
+      passwordInput.value = "";
+    }
+  });
+
+  const messageText = `💖 Mamá, no me alcanzará la vida para agradecer y pagarte todo lo que has hecho por mí 💖
+
+Eres mi ejemplo, mi maestra y mi héroe. Mantente firme y sigue luchando con ese espíritu hermoso que te caracteriza.
+
+Hoy, más que nunca, quiero que te apoyes en mi fuerza. Permíteme ser tu roca inquebrantable.
+
+Recuerda que tienes un ejército entero de amor a tu lado, listo para levantarte y darte ánimo en cada paso.
+
+— Tu gordo poloncho 💚`;
+
+  function typeWriterEffect(text, element, speed = 45) {
+    let i = 0;
+    element.innerHTML = "";
+    const interval = setInterval(() => {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        if (text.charAt(i) !== " " && text.charAt(i) !== "\n") {
+          typeSound.currentTime = 0;
+          typeSound.play().catch(() => {});
+        }
+        i++;
+      } else clearInterval(interval);
+    }, speed);
+  }
+
+  startButton.addEventListener('click', () => {
+    startScreen.classList.add('hidden');
+    voice.play();
+    voice.onended = () => {
+      music.play();
+      gallery.classList.remove('hidden');
+      setTimeout(() => {
+        typeWriterEffect(messageText, typewriter, 40);
+      }, 1000);
+    };
+  });
+</script>
+</body>
+</html>
+
+
